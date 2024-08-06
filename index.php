@@ -1,25 +1,5 @@
 <?php
 
-class Contact
-{
-    private string $name;
-    private string $surname;
-    private string $email;
-    private string $phone;
-    private string $address;
-
-    public function __construct(ContactBuilder $builder)
-    {
-        $this->name = $builder->getName();
-        $this->surname = $builder->getSurname();
-        $this->email = $builder->getEmail();
-        $this->phone = $builder->getPhone();
-        $this->address = $builder->getAddress();
-    }
-
-    // getters for product details will go here
-}
-
 class ContactBuilder
 {
     private string $name;
@@ -28,34 +8,45 @@ class ContactBuilder
     private string $phone;
     private string $address;
 
-    public function name($name): ContactBuilder
+    public function name(string $name): ContactBuilder
     {
         $this->name = $name;
         return $this;
     }
 
-    public function surname($surname): ContactBuilder
+    public function surname(string $surname): ContactBuilder
     {
         $this->surname = $surname;
         return $this;
     }
 
-    public function email($email): ContactBuilder
+    public function email(string $email): ContactBuilder
     {
         $this->email = $email;
         return $this;
     }
 
-    public function phone($phone): ContactBuilder
+    public function phone(string $phone): ContactBuilder
     {
         $this->phone = $phone;
         return $this;
     }
 
-    public function address($address): ContactBuilder
+    public function address(string $address): ContactBuilder
     {
         $this->address = $address;
         return $this;
+    }
+
+    public function build(): array
+    {
+        return [
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'address' => $this->address
+        ];
     }
 
     // getters will go here
@@ -83,17 +74,13 @@ class ContactBuilder
     {
         return $this->address;
     }
-
-    public function build(): Contact
-    {
-        return new Contact($this);
-    }
 }
 
-$productBuilder = new ContactBuilder();
-$product = $productBuilder->phone('000-555-000')
+$contactBuilder = new ContactBuilder();
+$contact = $contactBuilder
     ->name('John')
     ->surname('Doe')
     ->email('johndoe@example.com')
+    ->phone('000-555-000')
     ->address('Address')
     ->build();
