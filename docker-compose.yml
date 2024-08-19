@@ -17,7 +17,7 @@ services:
     networks:
       - app_network
     build:
-      context: .docker
+      context: .docker/php
     extra_hosts:
       - "host.docker.internal:host-gateway"
   database:
