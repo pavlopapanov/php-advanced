@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Http;
 use App\Enums\Http\Status;
 use Core\Router;
 use Dotenv\Dotenv;
