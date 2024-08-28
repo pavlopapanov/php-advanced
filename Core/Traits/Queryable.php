@@ -60,16 +60,19 @@ trait Queryable
         return $query->fetchObject(static::class);
     }
 
-    public static function create(array $fields): null|static
+    public static function create(array $fields): bool
     {
         $params = static::prepareCreateParams($fields);
         $query = db()->prepare('INSERT INTO ' . static::$tableName . " ($params[keys]) VALUES ($params[placeholders])");
 
-        if (!$query->execute($fields)) {
-            return null;
-        }
+        return $query->execute($fields);
+    }
 
+    public static function createAndReturn (array $fields): null|static
+    {
+        static::create($fields);
         return static::find(db()->lastInsertId());
+
     }
 
     public static function all(): array
@@ -131,7 +134,7 @@ trait Queryable
         return $this->where($column, $operator, $value);
     }
 
-    public function join(string $table,array $conditions, string $type = 'LEFT'): static
+    public function join(string $table, array $conditions, string $type = 'LEFT'): static
     {
         $this->required(['select'], 'JOIN can not be used without');
         $this->commands[] = 'join';
@@ -145,6 +148,13 @@ trait Queryable
         }
 
         return $this;
+    }
+
+    public function pluck(string $column): array
+    {
+        $result = $this->get();
+
+        return !empty($result) ? array_map(fn($obj) => $obj->$column, $result) : [];
     }
 
     protected function where(string $column, SQL $operator = SQL::EQUAL, $value = null): static

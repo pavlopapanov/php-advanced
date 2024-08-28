@@ -22,11 +22,16 @@ return [
             'command' => 'migration:down',
             'description' => 'Rollback migrations',
             'arguments' => []
+        ],
+        [
+            'command' => 'db:seed',
+            'description' => 'Run database seeders',
         ]
     ],
     'commands' => [
         'migration:create' => App\Commands\Migrations\Create::class,
         'migration:run' => App\Commands\Migrations\Run::class,
-        'migration:down' => App\Commands\Migrations\Down::class
+        'migration:down' => App\Commands\Migrations\Down::class,
+        'db:seed' =>  App\Commands\Seed::class
     ]
 ];

@@ -9,7 +9,7 @@ use Exception;
 
 class Create implements Command
 {
-    public const string MIGRATIONS_DIR = BASE_DIR . "/migrations";
+    public const string MIGRATIONS_DIR = BASE_DIR . "/database/migrations";
 
     public function __construct(public Cli $cli, public array $args = [])
     {
