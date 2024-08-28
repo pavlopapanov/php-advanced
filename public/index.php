@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\Http\Status;
+use App\Enums\SQL;
+use App\Models\User;
 use Core\Router;
 use Dotenv\Dotenv;
 
@@ -14,10 +16,23 @@ try {
 
     require_once BASE_DIR . '/routes/api.php';
     die(Router::dispatch($_SERVER['REQUEST_URI']));
+} catch (PDOException $exception) {
+    die(
+    jsonResponse(
+        Status::INTERNAL_SERVER_ERROR,
+        [
+            'errors' => [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTrace()
+            ]
+        ]
+    )
+    );
 } catch (Throwable $exception) {
     die(
     jsonResponse(
-        Status::from($exception->getCode()),
+        $exception->getCode() === 0 ? Status::UNPROCESSABLE_ENTITY : Status::from($exception->getCode()),
         data: [
             'errors' => $exception->getMessage(),
             'trace' => $exception->getTrace()
