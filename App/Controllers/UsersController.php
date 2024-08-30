@@ -3,16 +3,11 @@
 namespace App\Controllers;
 
 use App\Enums\Http\Status;
-use Core\Controller;
 
-class UsersController extends Controller
+class UsersController extends BaseApiController
 {
-    public function edit(int $id, int $note_id): array
+    public function index()
     {
-        return $this->response(Status::OK, compact('id', 'note_id'));
-    }
-
-    public function store()
-    {
+        return $this->response(Status::OK, ['message' => 'work']);
     }
 }

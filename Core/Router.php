@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use App\Controllers\BaseApiController;
 use App\Enums\Http\Status;
 use Core\Traits\HttpMethods;
 
@@ -86,7 +87,7 @@ class Router
             throw new \Exception("Controller {$controller} does not exist!", Status::INTERNAL_SERVER_ERROR->value);
         }
 
-        if (get_parent_class($controller) !== Controller::class) {
+        if (!in_array(get_parent_class($controller), [Controller::class, BaseApiController::class])) {
             throw new \Exception("Controller {$controller} does not extend " . Controller::class,
                 Status::INTERNAL_SERVER_ERROR->value);
         }
