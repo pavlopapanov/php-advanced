@@ -109,6 +109,13 @@ trait Queryable
         return db()->query(static::$query)->fetchAll(PDO::FETCH_CLASS, static::class);
     }
 
+    public function exists(): bool
+    {
+        $this->required(['select'], 'Method exists() can not be called without');
+
+        return !empty ($this->get());
+    }
+
     public function toSql(): string
     {
         return static::$query;
@@ -155,6 +162,30 @@ trait Queryable
         $result = $this->get();
 
         return !empty($result) ? array_map(fn($obj) => $obj->$column, $result) : [];
+    }
+
+    public function update(array $fields): static
+    {
+        $query = "UPDATE " . static::$tableName . " SET " . $this->updatePlaceholders($fields) . " WHERE id = :id";
+        $query = db()->prepare($query);
+
+        $fields['id'] = $this->id;
+        $query->execute($fields);
+
+        return static::find($this->id);
+    }
+
+    protected function updatePlaceholders(array $fields): string
+    {
+        $string = '';
+        $keys = array_keys($fields);
+        $lastKey = array_key_last($keys);
+
+        foreach ($keys as $index => $key) {
+            $string .= "$key = :$key" . ($index !== $lastKey ? ', ' : '');
+        }
+
+        return $string;
     }
 
     protected function where(string $column, SQL $operator = SQL::EQUAL, $value = null): static

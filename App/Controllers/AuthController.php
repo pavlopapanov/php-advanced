@@ -34,7 +34,7 @@ class AuthController extends Controller
             $user = User::findBy('email', $data['email']);
 
             if (password_verify($data['password'], $user->password)) {
-                $expiration = time() + 3600;
+                $expiration = time() + 10800;
                 $token = Token::create($user->id, $user->password, $expiration, 'localhost');
 
                 return $this->response(Status::OK, compact('token'));
