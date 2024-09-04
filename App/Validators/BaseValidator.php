@@ -14,6 +14,10 @@ abstract class BaseValidator
 
         foreach ($fields as $key => $value) {
             if (in_array($key, static::$skip)) {
+                if (!empty(static::$errors[$key])) {
+                    unset(static::$errors[$key]);
+                }
+
                 continue;
             }
 

@@ -10,7 +10,8 @@ abstract class Seeder
     protected Generator $faker;
     public static array $seeds = [
         UsersSeeder::class,
-        FoldersSeeder::class
+        FoldersSeeder::class,
+        NotesSeeder::class
     ];
 
     public function __construct()

@@ -26,7 +26,9 @@ function requestBody(): array
     $requestBody = file_get_contents('php://input');
     $body = json_decode($requestBody, true);
 
-    return !json_last_error() ? $body : [];
+    $fields = !json_last_error() ? $body : [];
+
+    return array_map(fn($item) => is_bool($item) ? (int)$item : $item, $fields);
 }
 
 function getAuthToken(): string
